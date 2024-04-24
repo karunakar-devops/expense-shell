@@ -1,5 +1,8 @@
 
 USERID=$(id -u)
+TIMESTAMP=$(date +%F-%H-%M-%S)
+SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
+LOGFILE=/tmp/$SCRIPT_NAME-$TIMESTAMP.log
 
 if [ $USERID -ne 0 ]
 then 
@@ -19,14 +22,14 @@ else
 fi
 }
 
-dnf install mysql-server -y
+dnf install mysql-server -y &>>$LOGFILE
 VALIDATE $? "Installing mysql server"
 
-systemctl enable mysqld 
+systemctl enable mysqld &>>$LOGFILE
 VALIDATE $? "Enabling mysql server"
 
-systemctl start mysqld
+systemctl start mysqld &>>$LOGFILE
 VALIDATE $? "startting mysql server"
 
-mysql_secure_Installation --set -root -pass ExpenseApp@1
+mysql_secure_Installation --set-root-pass ExpenseApp@1 &>>$LOGFILE
 VALIDATE $? "setting up root password"
