@@ -7,10 +7,10 @@ LOGFILE=/tmp/$SCRIPT_NAME-$TIMESTAMP.log
 echo "Please enter DB Password:"
 read  mysql_root_password
 
-R="\e[31m
-G="\e[32m
-Y="\e[33m
-N="\e[0m
+R="\e[31m"
+G="\e[32m"
+Y="\e[33m"
+N="\e[0m"
 
 
 if [ $USERID -ne 0 ]
@@ -47,6 +47,7 @@ mysql -h db.hornet78s.online --set-uroot-p ${mysql_root_password} -e 'show datab
 if [ $? -ne 0 ]
 then 
     mysql_secure_installation --set-root-pass ${mysql_root_password} &>>$LOGFILE
+    VALIDATE $? "setting up root password"
 
 else
     echo -e "Already password set..... $Y SKIPPING $N"
