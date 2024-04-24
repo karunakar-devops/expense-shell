@@ -4,6 +4,15 @@ TIMESTAMP=$(date +%F-%H-%M-%S)
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 LOGFILE=/tmp/$SCRIPT_NAME-$TIMESTAMP.log
 
+echo "Please enter DB Password:"
+read  mysql_root_password
+
+R="\e[31m
+G="\e[32m
+Y="\e[33m
+N="\e[0m
+
+
 if [ $USERID -ne 0 ]
 then 
     echo "Please run this script with root access"
@@ -15,10 +24,10 @@ fi
 VALIDATE(){
 if [ $1 -ne 0 ]
 then 
-    echo "$2 is...... Failure"
+    echo -e "$2 is......$R Failure $N"
     exit 1
 else
-    echo "$2 is..... Suceess"
+    echo -e "$2 is..... $G Suceess $N"
 fi
 }
 
@@ -31,5 +40,14 @@ VALIDATE $? "Enabling mysql server"
 systemctl start mysqld &>>$LOGFILE
 VALIDATE $? "startting mysql server"
 
-mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOGFILE
-VALIDATE $? "setting up root password"
+#mysql_secure_installation --set-root-pass ExpenseApp@1  &>>$LOGFILE
+#VALIDATE $? "setting up root password"
+
+mysql -h db.hornet78s.online --set-uroot-p ${mysql_root_password} -e 'show databases;' &>>$LOGFILE
+if [ $? -ne 0 ]
+then 
+    mysql_secure_installation --set-root-pass ${mysql_root_password} &>>$LOGFILE
+
+else
+    echo -e "Already password set..... $Y SKIPPING $N"
+fi
