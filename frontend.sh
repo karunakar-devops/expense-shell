@@ -25,26 +25,35 @@ VALIDATE(){
     fi
 }
 
-dnf install nginx -y 
+dnf install nginx -y &>>$LOGFILE
+VALIDATE $? "Installing nginx"
 
 systemctl enable nginx 
+VALIDATE $? "Enabling nginx"
 
 systemctl start nginx 
+VALIDATE $? "Starting nginx"
 
 rm -rf /usr/share/nginx/html/*
+VALIDATE $? "Removing content "
 
 curl -o /tmp/frontend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
+VALIDATE $? "copying frontend files"
 
 cd /usr/share/nginx/html
 
+
 unzip /tmp/frontend.zip
+VALIDATE $? "Unzipping frontend components"
 
 cp /home/ec2-user/expense-shell/expense.conf /etc/nginx/default.d/expense.conf
+VALIDATE $? "Copying  expense.conf"
 
 
 systemctl restart nginx
+VALIDATE $? "Restarting nginx"
 
-VALIDATE $? "Required steps done for nginx"
+
 
 
 
