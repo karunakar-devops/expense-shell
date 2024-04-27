@@ -46,9 +46,10 @@ VALIDATE $? "Installing nodejs"
 id expense &>>$LOGFILE
 if [ $? -ne 0 ]
 then
-useradd expense
+    useradd expense
+     VALIDATE $? "Creating expense user"
 else
-echo -e "User already exits..... $Y SKIPPING $N"
+    echo -e "User already exits..... $Y SKIPPING $N"
 
 mkdir -p /app &>>$LOGFILE
 VALIDATE $? "creating directory" 
