@@ -47,7 +47,7 @@ id expense &>>$LOGFILE
 if [ $? -ne 0 ]
 then
     useradd expense &>>$LOGFILE
-     VALIDATE $? "Creating expense user"
+    VALIDATE $? "Creating expense user"
 else
     echo -e "User already exits..... $Y SKIPPING $N"
 fi
@@ -65,25 +65,26 @@ rm -rf /app/*
 unzip /tmp/backend.zip &>>$LOGFILE
 VALIDATE $? "Unzipping files"
 
-npm install 
+npm install &>>$LOGFILE
 VALIDATE $? "Installing nodejs dependencies"
 
-cp C:\devops\daws-78s\repos-practice\expense-shell\backend.service /etc/systemd/sytem/backend.service
+cp C:\devops\daws-78s\repos-practice\expense-shell\backend.service /etc/systemd/sytem/backend.service &>>$LOGFILE
+VALIDATE $? "copied backend service"
 
-systemctl daemon-reload
+systemctl daemon-reload &>>$LOGFILE
 VALIDATE $? "daemon relaod"
 
-systemctl start backend
+systemctl start backend &>>$LOGFILE
 VALIDATE $? "Starting Backend"
 
-systemctl enable backend
+systemctl enable backend &>>$LOGFILE
 VALIDATE $? "Enabling backend"
 
-dnf install mysql -y
+dnf install mysql -y &>>$LOGFILE
 VALIDATE $? "Installing client server mysql"
 
-mysql -h db.hornet78s.online -uroot -p{mysql_root_password} < /app/schema/backend.sql
+mysql -h db.hornet78s.online -uroot -p{mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
 VALIDATE $? "Loading Schema"
 
-systemctl restart backend
+systemctl restart backend &>>$LOGFILE
 VALIDATE $? "restarting backend"
