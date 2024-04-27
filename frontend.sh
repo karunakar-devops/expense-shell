@@ -26,13 +26,10 @@ VALIDATE(){
 }
 
 dnf install nginx -y 
-VALIDATE $? "Installing nginx"
 
 systemctl enable nginx 
-VALIDATE $? "Enabling nginx"
 
 systemctl start nginx 
-VALIDATE $? "Starting nginx"
 
 rm -rf /usr/share/nginx/html/*
 
@@ -42,14 +39,12 @@ cd /usr/share/nginx/html
 
 unzip /tmp/frontend.zip
 
-VALIDATE $? "Enabling above steps"
-
 cp /home/ec2-user/expense-shell/expense.conf /etc/nginx/default.d/expense.conf
-VALIDATE $? "Copied expense conf"
 
 
 systemctl restart nginx
-VALIDATE $? "Restarting nginx"
+
+VALIDATE $? "Required steps done for nginx"
 
 
 
