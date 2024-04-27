@@ -83,7 +83,7 @@ VALIDATE $? "Enabling backend"
 dnf install mysql -y &>>$LOGFILE
 VALIDATE $? "Installing client server mysql"
 
-mysql -h db.hornet78s.online -uroot -p{mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
+mysql -h db.hornet78s.online -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
 VALIDATE $? "Loading Schema"
 
 systemctl restart backend &>>$LOGFILE
